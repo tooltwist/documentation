@@ -10,6 +10,12 @@
 #
 #	Check we have the commands we need
 #
+echo ""
+echo "#################################################################################"
+echo "#"
+echo "#  Checking we have the required commands available on this machine"
+echo "#"
+echo "#################################################################################"
 if ! which git > /dev/null ; then
 	echo ""
 	echo "ERROR: the 'git' command does not appear to be installed."
@@ -17,9 +23,11 @@ if ! which git > /dev/null ; then
 		echo ""
 		echo "	The easiest way to install git on OSX is to install 'Github For Mac' (https://contral.github.com/mac/latest)"
 		echo "	and then select 'Install Command Line Tools' from it's Preferences dialog."
+		echo ""
 	else
 		echo ""
 		echo "	See http://git-scm.com/book/en/Getting-Started-Installing-Git for instructions."
+		echo ""
 	fi
 	exit 1
 fi
@@ -32,6 +40,7 @@ if ! which ruby > /dev/null ; then
 	else
 		echo ""
 		echo "	See http://www.ruby-lang.org for instructions."
+		echo ""
 	fi
 	exit 1
 fi
@@ -40,13 +49,32 @@ if ! which jekyll > /dev/null ; then
 	echo "ERROR: the 'jekyll' command does not appear to be installed."
 	echo ""
 	echo "	See http://jekyllrb.com for instructions."
+	echo ""
+	exit 1
+fi
+if ! which node > /dev/null ; then
+	echo ""
+	echo "ERROR: Nodejs does not appear to be installed on this machine."
+	echo ""
+	echo "	See http://nodejs.org for instructions."
+	echo ""
+	exit 1
+fi
+if ! which npm > /dev/null ; then
+	echo ""
+	echo "ERROR: npm does not appear to be installed on this machine."
+	echo ""
+	echo "  It is normally installed when nodejs is installed."
+	echo ""
+	echo "	See https://npmjs.org for details."
+	echo ""
 	exit 1
 fi
 
 #
 # Get the github repo
 #
-echo "Checking git repo"
+echo "Checking git repository."
 if [ ! -d .git ] ; then
 	echo "This directory is not a git repository"
 	exit 1
@@ -65,7 +93,7 @@ else
 	echo "No remote origin is defined for this repository"
 	exit 1
 fi
-echo repo = ${remote}
+echo remote = ${remote}
 
 #
 #	Check the repo is for github
@@ -87,15 +115,17 @@ else
 	exit 1
 fi
 
+
 #
 # Check we have github-pages
 #
+echo Checking documentation/github-pages
 if [ ! -d documentation/github-pages ] ; then
-	echo "####################################################################"
+	echo "#################################################################################"
 	echo "#"
-	echo "#    Settig up documentation/github-pages."
+	echo "#  Setting up documentation/github-pages."
 	echo "#"
-	echo "####################################################################"
+	echo "#################################################################################"
 	mkdir -p documentation
 
 	# See if there is already a gh-pages branch
@@ -103,12 +133,22 @@ if [ ! -d documentation/github-pages ] ; then
 
 		# Clone the existing branch
 		echo "# Cloning the existing gh-pages branch."
-		(
-			echo "$ cd documentation"
-			cd documentation
-			echo "$ git -b gp-pages clone ${remote} github-pages"
-			git clone -b gp-pages ${remote} github-pages
-		)
+		echo "$ cd documentation"
+		cd documentation
+		echo "$ git -b gp-pages clone ${remote} github-pages"
+		if ! git clone ${remote} github-pages ; then
+			echo "ERROR: Failed to clone repo."
+			exit 1
+		fi
+		cd github-pages
+		if ! git checkout gh-pages ; then
+			echo "ERROR: checkout failed."
+			exit 1
+		fi
+		# We don't need the master branch here any more (this doesn't effect the remote repo)
+		git branch -d master
+		git prune
+		cd ../..
 	else
 		# Create a new branch
 		# (https://help.github.com/articles/creating-project-pages-manually)
@@ -139,13 +179,14 @@ fi
 #
 # Check we have documentation/github-wiki
 #
+echo Checking documentation/github-wiki
 if [ ! -d documentation/github-wiki ] ; then
 	echo ""
-	echo "####################################################################"
+	echo "#################################################################################"
 	echo "#"
-	echo "#    Cloning wiki into directory doumentation/github-wiki"
+	echo "#  Cloning wiki into documentation/github-wiki."
 	echo "#"
-	echo "####################################################################"
+	echo "#################################################################################"
 	mkdir -p documentation
 	(
 		cd documentation
@@ -160,36 +201,140 @@ fi
 #
 #	Check we have documentation/restapi
 #
+echo Checking documentation/restapi
 if [ ! -d documentation/restapi ] ; then
 	echo ""
-	echo "####################################################################"
+	echo "#################################################################################"
 	echo "#"
-	echo "#    Creating REST API documentation into documentation/restapi"
+	echo "#  Creating example API documentation in documentation/restapi."
 	echo "#"
-	echo "####################################################################"
+	echo "#################################################################################"
 	mkdir -p documentation
-	(
-		cd documentation
-		RESTAPI_TAR=https://github.com/tooltwist/documentation/raw/master/create-standard-directories/restapi.tar.gz
-		curl -s -S -L ${RESTAPI} | tar xzvf -
-		# Remove any weird OSX files
-		find restapi -name '._*' -ls -exec rm {} \;
-		find restapi -name '.DS_Store' -ls -exec rm {} \;
-	)
+	RESTAPI_TARBALL=https://github.com/tooltwist/documentation/raw/master/create-standard-directories/restapi.tar.gz
+	curl -s -S -L ${RESTAPI_TARBALL} | tar xzvf -
+	# Remove any weird OSX files
+	find documenttion/restapi -name '._*' -ls -exec rm {} \;
+	find documenttion/restapi -name '.DS_Store' -ls -exec rm {} \;
 fi
 
 
 #
-#	Display a nice message
+#	Check we have testing/cucumber
 #
-wiki_url=http://github.com/${user}/${repo}/wiki
-pages_url=http://${user}.github.io/${repo}
-restapi_url=http://${user}.github.io/${repo}/restapi
+echo Checking testing/cucumber
+if [ ! -d testing/cucumber ] ; then
+	echo ""
+	echo "#################################################################################"
+	echo "#"
+	echo "#  Creating example BDD tests in testing/cucumber."
+	echo "#"
+	echo "#################################################################################"
+	mkdir -p testing
+	CUCUMBER_TARBALL=https://github.com/tooltwist/documentation/raw/master/create-standard-directories/cucumber.tar.gz
+	curl -s -S -L ${CUCUMBER_TARBALL} | tar xzvf -
+	# Remove any weird OSX files
+	find testing/cucumber -name '._*' -ls -exec rm {} \;
+	find testing/cucumber -name '.DS_Store' -ls -exec rm {} \;
+fi
 
+
+#
+#	Check .gitignore contains appropriate entries
+#
+echo Checking .gitignore
+if [ ! -e .gitignore ] ; then
+	echo "$ touch .gitignore"
+	touch .gitignore
+fi
+f=.DS_Store
+if ! grep "^${f}$" .gitignore ; then
+	echo " - adding ${f}"
+	echo "${f}" >> .gitignore
+fi
+f=/documentation/github-pages
+if ! grep "^${f}$" .gitignore ; then
+	echo " - adding ${f}"
+	echo "${f}" >> .gitignore
+fi
+f=/documentation/github-wiki
+if ! grep "^${f}$" .gitignore ; then
+	echo " - adding ${f}"
+	echo "${f}" >> .gitignore
+fi
+f=/documentation/restapi/_site
+if ! grep "^${f}$" .gitignore ; then
+	echo " - adding ${f}"
+	echo "${f}" >> .gitignore
+fi
+
+
+#
+#	Check we have an README.md
+#
+pages_url=http://${user}.github.io/${repo}
+wiki_url=http://github.com/${user}/${repo}/wiki
+issues_url=http://github.com/${user}/${repo}/issues
+restapi_url=http://${user}.github.io/${repo}/restapi
+echo Checking README.md
+haveReadme=false
+if [ -e README.md ] ; then
+        if [ -s README.md ] ; then
+                # Check the file has content
+                trimmed=`sed 's/^[ \t]*//' README.md`
+                if [ "${trimmed}" != "" ] ; then
+                        haveReadme=true
+                fi
+        fi
+fi
+
+if [ ${haveReadme} == "false" ] ; then
+	echo "#################################################################################"
+	echo "#"
+	echo "#  Creating README.md"
+	echo "#"
+	echo "#################################################################################"
+	cat > README.md << END
+
+#### Project Website:  
+  
+  [${pages_url}]  
+
+#### Wiki:  
+
+  [${wiki_url}]  
+
+#### Technical issues:  
+
+  [${issues_url}].  
+
+Note: this is for developers; customers use a different error reporting system.  
+
+#### REST API:  
+
+  [${restapi_url}]  
+
+END
+fi
+
+#
+#	Finish with a nice message
+#
+echo Checks complete
+echo "#################################################################################"
 echo ""
 echo ""
-echo "Project checks complete."
-echo "  Wiki url = ${wiki_url}"
 echo "  Project website = ${pages_url}"
+echo ""
+echo "  Wiki = ${wiki_url}"
+echo ""
+echo "  Issues = ${issues_url}"
+echo ""
 echo "  REST API = ${restapi_url}"
+echo ""
+echo ""
+echo "For information about how to use these directories go to:"
+echo ""
+echo "  https://github.com/tooltwist/documentation/wiki/_preview#standard-directories"
+echo ""
+echo "#################################################################################"
 exit 0

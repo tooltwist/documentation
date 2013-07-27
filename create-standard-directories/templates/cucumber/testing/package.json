@@ -1,0 +1,17 @@
+{
+    "name": "application-name"
+  , "version": "0.0.1"
+  , "private": true
+  , "dependencies": {
+      "mocha"       : "*"
+    , "should"      : "*"
+    , "sinon"       : "*"
+    , "cucumber"    : "*"
+    , "request"    : "*"
+    , "redis"    : "*"
+  },
+  "scripts": {
+    "test":"mocha"
+  }
+}
+

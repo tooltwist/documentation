@@ -2,8 +2,11 @@
 #
 #	Install files to the Gihub Pages directory (<projectname>.pages) and push to the remote repository
 #
-DOCUMENTATION_DIR=`dirname $0`
-#echo ${DOCUMENTATION_DIR}
+dir=`dirname $0`
+cd $dir
+DOCUMENTATION_DIR=`pwd`
+echo DOCUMENTATION_DIR=${DOCUMENTATION_DIR}
+
 
 PROJECT_NAME=tea
 

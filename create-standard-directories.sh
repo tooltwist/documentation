@@ -211,6 +211,8 @@ if [ ! -d documentation/wiki ] ; then
 		echo ""
 		exit 1
 	fi
+	# Create default directory for images (if it's not already there)
+	mkdir -p wiki/images
 	cd ..
 fi
 
@@ -300,6 +302,10 @@ issues_url=http://github.com/${user}/${repo}/issues
 restapi_url=http://${user}.github.io/${repo}/restapi
 echo Checking README.md
 haveReadme=false
+default_line1="${repo}"
+default_line2=`echo ${repo} | sed "s/./=/g"`
+default_line3=""
+actual_line4=""
 if [ -e README.md ] ; then
         if [ -s README.md ] ; then
                 # Check the file has content
@@ -316,19 +322,16 @@ if [ -e README.md ] ; then
 			line1=`sed -n 1p README.md`
 			line2=`sed -n 2p README.md`
 			line3=`sed -n 3p README.md`
-
-			required_line1="${repo}"
-			required_line2=`echo ${repo} | sed "s/./=/g"`
-			required_line3=""
+			actual_line4=`sed -n 4p README.md`
 
 			[ "${lines}" -ne 4 ] && haveReadme=true
-			[ "${line1}" != "${required_line1}" ] && haveReadme=true
-			[ "${line2}" != "${required_line2}" ] && haveReadme=true
-			[ "${line3}" != "${required_line3}" ] && haveReadme=true
+			[ "${line1}" != "${default_line1}" ] && haveReadme=true
+			[ "${line2}" != "${default_line2}" ] && haveReadme=true
+			[ "${line3}" != "${default_line3}" ] && haveReadme=true
                 fi
         fi
 fi
-
+ 
 if [ ${haveReadme} == "false" ] ; then
 	echo "#################################################################################"
 	echo "#"
@@ -336,6 +339,10 @@ if [ ${haveReadme} == "false" ] ; then
 	echo "#"
 	echo "#################################################################################"
 	cat > README.md << END
+${default_line1}
+${default_line2}
+${default_line3}
+${actual_line4}
 
 #### Project Website:  
   
@@ -377,6 +384,13 @@ echo ""
 echo "For information about how to use these directories go to:"
 echo ""
 echo "  https://github.com/tooltwist/documentation/wiki/_preview#standard-directories"
+echo ""
+echo "Useful commands to try now:"
+echo ""
+echo "  documentation/publish_restapi.sh"
+echo "  testing/run_cucumber.sh"
+echo ""
+echo "Finally, make sure you push the changes created by the command to Github as soon as possible (i.e. right now)"
 echo ""
 echo "#################################################################################"
 exit 0

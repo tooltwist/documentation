@@ -2,7 +2,10 @@
 #
 #	Run Cucumber tests
 #
-TESTING_DIR=`dirname $0`
+dir=`dirname $0`
+cd $dir
+TESTING_DIR=`pwd`
+echo TESTING_DIR=${TESTING_DIR}
 
 cd ${TESTING_DIR}
 ./node_modules/.bin/cucumber.js  --tags ~@ignore cucumber/features \

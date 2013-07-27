@@ -16,6 +16,7 @@ echo "#"
 echo "#  Checking we have the required commands available on this machine"
 echo "#"
 echo "#################################################################################"
+echo " - git"
 if ! which git > /dev/null ; then
 	echo ""
 	echo "ERROR: the 'git' command does not appear to be installed."
@@ -31,6 +32,7 @@ if ! which git > /dev/null ; then
 	fi
 	exit 1
 fi
+echo " - ruby"
 if ! which ruby > /dev/null ; then
 	echo ""
 	echo "ERROR: the 'ruby' command does not appear to be installed."
@@ -44,6 +46,7 @@ if ! which ruby > /dev/null ; then
 	fi
 	exit 1
 fi
+echo " - jekyll"
 if ! which jekyll > /dev/null ; then
 	echo ""
 	echo "ERROR: the 'jekyll' command does not appear to be installed."
@@ -52,6 +55,7 @@ if ! which jekyll > /dev/null ; then
 	echo ""
 	exit 1
 fi
+echo " - node"
 if ! which node > /dev/null ; then
 	echo ""
 	echo "ERROR: Nodejs does not appear to be installed on this machine."
@@ -60,6 +64,7 @@ if ! which node > /dev/null ; then
 	echo ""
 	exit 1
 fi
+echo " - npm"
 if ! which npm > /dev/null ; then
 	echo ""
 	echo "ERROR: npm does not appear to be installed on this machine."
@@ -188,20 +193,19 @@ if [ ! -d documentation/wiki ] ; then
 	echo "#"
 	echo "#################################################################################"
 	mkdir -p documentation
-	(
-		cd documentation
-		wiki_repo=`echo ${remote} | sed "s/\\.git$/.wiki.git/"`
-		echo wiki = ${wiki_repo}
-		echo "$ git clone ${wiki_repo} wiki"
-		if ! git clone ${wiki_repo} wiki ; then
-			echo "ERROR: cloning wiki failed."
-			echo ""
-			echo "  If this is a new github repository, go to the website and click on the 'wiki'"
-			echo "  button for this repo, then run this command again."
-			echo ""
-			exit 1
-		fi
-	)
+	cd documentation
+	wiki_repo=`echo ${remote} | sed "s/\\.git$/.wiki.git/"`
+	echo wiki = ${wiki_repo}
+	echo "$ git clone ${wiki_repo} wiki"
+	if ! git clone ${wiki_repo} wiki ; then
+		echo "ERROR: cloning wiki failed."
+		echo ""
+		echo "  If this is a new github repository, go to the website and click on the 'wiki'"
+		echo "  button for this repo, then run this command again."
+		echo ""
+		exit 1
+	fi
+	cd ..
 fi
 
 
@@ -295,7 +299,26 @@ if [ -e README.md ] ; then
                 # Check the file has content
                 trimmed=`sed 's/^[ \t]*//' README.md`
                 if [ "${trimmed}" != "" ] ; then
-                        haveReadme=true
+			# We have a Readme file and it is not null. See if it is the default file:
+			#
+			# myproject
+			# =========
+			#
+			# Optional single line description
+
+			lines=`wc -l README.md | sed "s/ README.md.*$//"`
+			line1=`sed -n 1p README.md`
+			line2=`sed -n 2p README.md`
+			line3=`sed -n 3p README.md`
+
+			required_line1="${repo}"
+			required_line2=`echo ${repo} | sed "s/./=/g"`
+			required_line3=""
+
+			[ "${lines}" -ne 4 ] && haveReadme=true
+			[ "${line1}" != "${required_line1}" ] && haveReadme=true
+			[ "${line2}" != "${required_line2}" ] && haveReadme=true
+			[ "${line3}" != "${required_line3}" ] && haveReadme=true
                 fi
         fi
 fi

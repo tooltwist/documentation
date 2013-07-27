@@ -10,13 +10,17 @@
 #
 #	Check we have the commands we need
 #
+REPO_DIR=`pwd`
 echo ""
 echo "#################################################################################"
 echo "#"
-echo "#  Checking we have the required commands available on this machine"
+echo "#  Installing Standard documentation and testing directories beneath repository."
+echo "#"
+echo "#     ${REPO_DIR}" 
 echo "#"
 echo "#################################################################################"
-echo " - git"
+echo "Check we have the required commands available on this machine"
+echo "git \c"
 if ! which git > /dev/null ; then
 	echo ""
 	echo "ERROR: the 'git' command does not appear to be installed."
@@ -32,7 +36,7 @@ if ! which git > /dev/null ; then
 	fi
 	exit 1
 fi
-echo " - ruby"
+echo "ruby \c"
 if ! which ruby > /dev/null ; then
 	echo ""
 	echo "ERROR: the 'ruby' command does not appear to be installed."
@@ -46,7 +50,7 @@ if ! which ruby > /dev/null ; then
 	fi
 	exit 1
 fi
-echo " - jekyll"
+echo "jekyll \c"
 if ! which jekyll > /dev/null ; then
 	echo ""
 	echo "ERROR: the 'jekyll' command does not appear to be installed."
@@ -55,7 +59,7 @@ if ! which jekyll > /dev/null ; then
 	echo ""
 	exit 1
 fi
-echo " - node"
+echo "node \c"
 if ! which node > /dev/null ; then
 	echo ""
 	echo "ERROR: Nodejs does not appear to be installed on this machine."
@@ -64,7 +68,7 @@ if ! which node > /dev/null ; then
 	echo ""
 	exit 1
 fi
-echo " - npm"
+echo "npm \c"
 if ! which npm > /dev/null ; then
 	echo ""
 	echo "ERROR: npm does not appear to be installed on this machine."
@@ -75,6 +79,7 @@ if ! which npm > /dev/null ; then
 	echo ""
 	exit 1
 fi
+echo ""
 
 #
 # Get the github repo

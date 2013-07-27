@@ -170,8 +170,11 @@ if [ ! -d documentation/restapi ] ; then
 	mkdir -p documentation
 	(
 		cd documentation
-		RESTAPI_TAR=/tmp/,restapi
-		tar xvf ${RESTAPI_TAR} 
+		RESTAPI_TAR=https://github.com/tooltwist/documentation/raw/master/create-standard-directories/restapi.tar.gz
+		curl -s -S -L ${RESTAPI} | tar xzvf -
+		# Remove any weird OSX files
+		find restapi -name '._*' -ls -exec rm {} \;
+		find restapi -name '.DS_Store' -ls -exec rm {} \;
 	)
 fi
 

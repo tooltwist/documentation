@@ -291,6 +291,11 @@ if ! grep "^${f}$" .gitignore ; then
 	echo " - adding ${f}"
 	echo "${f}" >> .gitignore
 fi
+f="/testing/node_modules"
+if ! grep "^${f}$" .gitignore ; then
+	echo " - adding ${f}"
+	echo "${f}" >> .gitignore
+fi
 
 
 #
@@ -387,8 +392,8 @@ echo "  https://github.com/tooltwist/documentation/wiki/_preview#standard-direct
 echo ""
 echo "Useful commands to try now:"
 echo ""
-echo "  documentation/publish_restapi.sh"
-echo "  testing/run_cucumber.sh"
+echo "  documentation/publish-restapi.sh"
+echo "  testing/run-cucumber.sh"
 echo ""
 echo "Finally, make sure you push the changes created by the command to Github as soon as possible (i.e. right now)"
 echo ""

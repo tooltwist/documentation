@@ -346,21 +346,21 @@ ${actual_line4}
 
 #### Project Website:  
   
-  [${pages_url}]  
+  <${pages_url}>  
 
 #### Wiki:  
 
-  [${wiki_url}]  
+  <${wiki_url}>  
 
 #### Technical issues:  
 
-  [${issues_url}].  
+  <${issues_url}>  
 
 Note: this is for developers; customers use a different error reporting system.  
 
 #### REST API:  
 
-  [${restapi_url}]  
+  <${restapi_url}>  
 
 END
 fi

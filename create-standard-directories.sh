@@ -235,6 +235,12 @@ if [ ! -d testing/cucumber ] ; then
 	# Remove any weird OSX files
 	find testing/cucumber -name '._*' -ls -exec rm {} \;
 	find testing/cucumber -name '.DS_Store' -ls -exec rm {} \;
+	# Install any required node packages
+	echo "Checking node packages used in testing"
+	(
+		cd testing
+		npm install
+	)
 fi
 
 

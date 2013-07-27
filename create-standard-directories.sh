@@ -193,7 +193,14 @@ if [ ! -d documentation/wiki ] ; then
 		wiki_repo=`echo ${remote} | sed "s/\\.git$/.wiki.git/"`
 		echo wiki = ${wiki_repo}
 		echo "$ git clone ${wiki_repo} wiki"
-		git clone ${wiki_repo} wiki
+		if ! git clone ${wiki_repo} wiki ; then
+			echo "ERROR: cloning wiki failed."
+			echo ""
+			echo "  If this is a new github repository, go to the website and click on the 'wiki'"
+			echo "  button for this repo, then run this command again."
+			echo ""
+			exit 1
+		fi
 	)
 fi
 

@@ -117,13 +117,13 @@ fi
 
 
 #
-# Check we have github-pages
+# Check we have documentation/site
 #
-echo Checking documentation/github-pages
-if [ ! -d documentation/github-pages ] ; then
+echo Checking documentation/site
+if [ ! -d documentation/site ] ; then
 	echo "#################################################################################"
 	echo "#"
-	echo "#  Setting up documentation/github-pages."
+	echo "#  Setting up documentation/site."
 	echo "#"
 	echo "#################################################################################"
 	mkdir -p documentation
@@ -135,12 +135,12 @@ if [ ! -d documentation/github-pages ] ; then
 		echo "# Cloning the existing gh-pages branch."
 		echo "$ cd documentation"
 		cd documentation
-		echo "$ git -b gp-pages clone ${remote} github-pages"
-		if ! git clone ${remote} github-pages ; then
+		echo "$ git -b gp-pages clone ${remote} site"
+		if ! git clone ${remote} site ; then
 			echo "ERROR: Failed to clone repo."
 			exit 1
 		fi
-		cd github-pages
+		cd site
 		if ! git checkout gh-pages ; then
 			echo "ERROR: checkout failed."
 			exit 1
@@ -156,10 +156,10 @@ if [ ! -d documentation/github-pages ] ; then
 		(
 			echo "$ cd documentation"
 			cd documentation
-			echo "$ git clone ${remote} github-pages"
-			git clone ${remote} github-pages
-			echo "$ cd github-pages"
-			cd github-pages
+			echo "$ git clone ${remote} site"
+			git clone ${remote} site
+			echo "$ cd site"
+			cd site
 			echo "$ git checkout --orphan gh-pages"
 			git checkout --orphan gh-pages
 			echo "$ git rm -rf ."
@@ -177,14 +177,14 @@ if [ ! -d documentation/github-pages ] ; then
 fi
 
 #
-# Check we have documentation/github-wiki
+# Check we have documentation/wiki
 #
-echo Checking documentation/github-wiki
-if [ ! -d documentation/github-wiki ] ; then
+echo Checking documentation/wiki
+if [ ! -d documentation/wiki ] ; then
 	echo ""
 	echo "#################################################################################"
 	echo "#"
-	echo "#  Cloning wiki into documentation/github-wiki."
+	echo "#  Cloning wiki into documentation/wiki."
 	echo "#"
 	echo "#################################################################################"
 	mkdir -p documentation
@@ -192,8 +192,8 @@ if [ ! -d documentation/github-wiki ] ; then
 		cd documentation
 		wiki_repo=`echo ${remote} | sed "s/\\.git$/.wiki.git/"`
 		echo wiki = ${wiki_repo}
-		echo "$ git clone ${wiki_repo} github-wiki"
-		git clone ${wiki_repo} github-wiki
+		echo "$ git clone ${wiki_repo} wiki"
+		git clone ${wiki_repo} wiki
 	)
 fi
 
@@ -257,12 +257,12 @@ if ! grep "^${f}$" .gitignore ; then
 	echo " - adding ${f}"
 	echo "${f}" >> .gitignore
 fi
-f=/documentation/github-pages
+f=/documentation/site
 if ! grep "^${f}$" .gitignore ; then
 	echo " - adding ${f}"
 	echo "${f}" >> .gitignore
 fi
-f=/documentation/github-wiki
+f=/documentation/wiki
 if ! grep "^${f}$" .gitignore ; then
 	echo " - adding ${f}"
 	echo "${f}" >> .gitignore

@@ -86,21 +86,22 @@ echo ""
 #
 echo "Checking git repository."
 if [ ! -d .git ] ; then
-	echo "This directory is not a git repository"
+	echo ""
+	echo "ERROR: This directory is not a git repository"
 	exit 1
 fi
 
 if remote=`git remote -v` ; then
 	true
 else
-	echo Error running git remote -v
+	echo "ERROR: could not running git remote -v"
 	exit 1
 fi
 
 if echo ${remote} | grep origin > /dev/null ; then
 	remote=`echo $remote | sed "s/.*origin \\(.*\\) (fetch).*/\\1/"`
 else
-	echo "No remote origin is defined for this repository"
+	echo "ERROR: No remote origin is defined for this repository"
 	exit 1
 fi
 echo remote = ${remote}

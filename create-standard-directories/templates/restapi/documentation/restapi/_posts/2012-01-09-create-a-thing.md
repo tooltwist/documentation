@@ -42,5 +42,5 @@ For errors responses, see the [response status codes documentation](#response-st
 
 ### Testing from the command line
 
-curl -i -H "Accept: application/json" -X POST -d @**inputFilename** http://**host**:**port**/thing
+curl -i -H 'Content-Type: application/json' -X POST -d @**jsonInputFile** http://**host**:**port**/thing
 

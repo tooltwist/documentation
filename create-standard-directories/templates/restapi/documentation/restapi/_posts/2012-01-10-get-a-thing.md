@@ -30,6 +30,6 @@ Sends back details of a single 'thing'.
 For errors responses, see the [response status codes documentation](#response-status-codes).
 
 
-### Testing
+### Testing from the command line
 
-curl hostname:port/thing/id
+curl **hostname**:**port**/quiz/**id**

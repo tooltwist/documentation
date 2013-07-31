@@ -30,6 +30,6 @@ PROJECT_NAME=tea
 # Display a warning
 echo "Complete"
 echo ""
-echo "  Note that changes to github pages usualy take several minutes to be reflected on the website."
+echo "  Note that changes to github pages usually take several minutes to be reflected on the website."
 echo ""
 exit 0

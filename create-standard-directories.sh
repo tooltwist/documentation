@@ -206,8 +206,8 @@ if [ ! -d documentation/wiki ] ; then
 	if ! git clone ${wiki_repo} wiki ; then
 		echo "ERROR: cloning wiki failed."
 		echo ""
-		echo "  If this is a new github repository, go to the website and click on the 'wiki'"
-		echo "  button for this repo, then run this command again."
+		echo "  If this is a new github repository, go to the website and click"
+		echo "  on the 'wiki' button for this repo, then run this command again."
 		echo ""
 		exit 1
 	fi
@@ -232,8 +232,8 @@ if [ ! -d documentation/restapi ] ; then
 	RESTAPI_TARBALL=https://github.com/tooltwist/documentation/raw/master/create-standard-directories/restapi.tar.gz
 	curl -s -S -L ${RESTAPI_TARBALL} | tar xzvf -
 	# Remove any weird OSX files
-	find documenttion/restapi -name '._*' -ls -exec rm {} \;
-	find documenttion/restapi -name '.DS_Store' -ls -exec rm {} \;
+	find documentation/restapi -name '._*' -ls -exec rm {} \;
+	find documentation/restapi -name '.DS_Store' -ls -exec rm {} \;
 fi
 
 

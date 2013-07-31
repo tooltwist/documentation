@@ -33,11 +33,6 @@ This method allows users to create a new 'thing'.
 
 **If succeeds**, returns a status code of 'ok'.
 
-### Testing from the command line
-
-curl -i -H "Accept: application/json" -X POST -d @**inputDataFilename** http://**host**:**port**/thing
-
-
 
 ```Status: 200 OK```
 ```{
@@ -45,3 +40,8 @@ curl -i -H "Accept: application/json" -X POST -d @**inputDataFilename** http://*
 }```
 
 For errors responses, see the [response status codes documentation](#response-status-codes).
+
+
+### Testing from the command line
+
+curl -i -H "Accept: application/json" -X POST -d @**inputFilename** http://**host**:**port**/thing
